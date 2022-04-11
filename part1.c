@@ -60,16 +60,24 @@ int main(int argc, char* argv[]) {
 	read(fd_in, memAccesses, (int) filesize);
 	close(fd_in);
 
-    unsigned long shiftedNum;
+    unsigned long offset;
+    unsigned long pageNum;
+    unsigned long frameNum;
+    unsigned long physicalAddress;
 
 	// Traverse all address
 	for(i = 0; i < filesize/(sizeof (unsigned long)); i++) {
+        //Virtual Address = memAccesses[i]
         printf("logical address %d = %#010lx\n", i, memAccesses[i]);
-        shiftedNum = memAccesses[i] & 0x7f;
-        printf("%#010lx\n", shiftedNum);
+        pageNum = memAccesses[i] >> 7;
+        offset = memAccesses[i] & 0x7f;
+        frameNum = pageTable[pageNum];
+        physicalAddress = frameNum << 7 | offset;
+        printf("physical address %d = %#010lx\n",i, physicalAddress);
+        // printf("%#010lx\n", pageNum);
+        // printf("%#010lx\n", offset);
         //Do Conversions
 	}
-
 
 	free (memAccesses); //free dynamically allocated memory
     return 0;
