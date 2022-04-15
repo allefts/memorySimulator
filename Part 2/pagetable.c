@@ -3,5 +3,5 @@
 struct PageTableEntry {
     int validBit;
     int frameNum;
-    int lastReferenced;
+    int refCount;
 };
